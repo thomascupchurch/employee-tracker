@@ -1,11 +1,69 @@
 const express = require('express');
+const { builtinModules } = require('module');
 const router = express.Router();
 const db = require('../db/connection');
 
 
+// GET all employees
 router.get('/employees', (req, res) => {
-    const sql = `SELECT employee.*, role.name
-    AS 
-    
-    ON employee.role_id = role.id`
-})
+    const sql = `SELECT employees.*, roles.title
+    AS role_title
+    FROM employees
+    LEFT JOIN roles
+    ON employees.role_title = roles.title`;
+
+  
+
+    db.query(sql, (err, rows) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.json({
+            message: 'success',
+            data: rows
+        });
+    });
+});
+
+// GET a single employee
+router.get('./employee/:id', (req, res) => {
+    const sql = `SELECT employees.*, roles.title
+    AS role_title
+    FROM employees
+    LEFT JOIN roles
+    ON employees.role_title = roles.title
+    WHERE employees.id = ?`;
+    const params = [req.params.id];
+
+    db.query(sql, params, (err, row) => {
+        if (err) {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+        res.json({
+            message: 'success',
+            data: row
+        });
+    });
+});
+
+// Create an employee
+router.post('./employee', ({ body }, res) => {
+    const sql = `INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
+    VALUES (?, ?, ?, ?)`;
+    const params = [body.id, body.first_name, body.last_name, body.role_id];
+
+    db.query(sql, params, (err, result) => {
+        if (err) {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+        res.json({
+            message: 'success',
+            data: body
+        });
+    });
+});
+
+module.exports = router;

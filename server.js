@@ -3,6 +3,8 @@ const inquirer = require('inquirer');
 const cTable = require('console.table');
 const express = require('express');
 const employeeRoutes = require('./routes/employeeRoutes');
+const db = require('./db/connection');
+
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -24,3 +26,5 @@ db.connect(err => {
         console.log(`Server running on port ${PORT}`);
     });
 });
+
+
