@@ -167,7 +167,8 @@ const removeEmployee = async () => {
         name: 'deleteEmpId',
         message: 'What is the id of the employee you wish to delete?'
     });
-    db.query(`DELETE FROM employees WHERE id = ?`,
+    db.query(`DELETE FROM employees WHERE id = ?`, 
+        deleteEmp.deleteEmpId,
         (err, res) => {
             if (err) {
                 console.log(err);
@@ -179,7 +180,28 @@ const removeEmployee = async () => {
 
 
 const updateRole = async () => {
-
+    const roleUpdate = await inquirer
+    .prompt([
+        {
+        type: 'number',
+        name: 'empId',
+        message: 'What is the id of the employee you wish to update?'
+        },
+        {
+        type: 'number',
+        name: 'roleId',
+        message: 'What is the new role id for this employee?'
+        }
+    ]);
+    db.query(`UPDATE employees
+    SET role_id = ?
+    Where id = ?`, [roleUpdate.empId, roleUpdate.roleId],
+    (err, res) => {
+        if (err) {
+            console.log(err);
+        }
+        console.table(res);
+    });
 };
 
 const updateManager = async () => {
