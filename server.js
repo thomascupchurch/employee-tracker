@@ -4,6 +4,8 @@ const cTable = require('console.table');
 const express = require('express');
 const employeeRoutes = require('./routes/employeeRoutes');
 const db = require('./db/connection');
+const router = require('./routes/employeeRoutes');
+const { restoreDefaultPrompts } = require('inquirer');
 
 
 const PORT = process.env.PORT || 3001;
@@ -159,8 +161,22 @@ const addEmployee = async () => {
 };
 
 const removeEmployee = async () => {
+    const deleteEmp = await inquirer
+    .prompt({
+        type: 'number',
+        name: 'deleteEmpId',
+        message: 'What is the id of the employee you wish to delete?'
+    });
+    db.query(`DELETE FROM employees WHERE id = ?`,
+        (err, res) => {
+            if (err) {
+                console.log(err);
+            }
+            console.table(res);
+        });
+    };
+    
 
-};
 
 const updateRole = async () => {
 

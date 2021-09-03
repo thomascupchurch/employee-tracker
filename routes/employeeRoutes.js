@@ -102,6 +102,27 @@ router.post('/employee', ({ body }, res) => {
 
 router.put('/employee', ({ body }, res) => {
 
-})
+});
+
+router.delete('/employee/:id', ({ body }, res) => {
+    
+        const sql = `DELETE FROM employees WHERE id = ?`;
+        const params = body.id;
+        db.query(sql, params, (err, result) => {
+            if (err) {
+                res.status(400).json({ error: res.message });
+              } else if (!result.affectedRows) {
+                res.json({
+                  message: 'Candidate not found'
+                });
+              } else {
+                res.json({
+                  message: 'deleted',
+                  changes: result.affectedRows,
+                  id: req.params.id
+                });
+              }
+        });
+});
 
 module.exports = router;
