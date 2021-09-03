@@ -28,8 +28,9 @@ router.get('/employee', (req, res) => {
 router.get('/employee/department/:dept', (req, res) => {
     const sql = `SELECT * FROM employees
     WHERE departments.id = ?`;
+    const params = [req.params.department_id];
 
-     db.query(sql, req.params.id, (err, rows) => {
+     db.query(sql, params, (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
             return;
@@ -45,8 +46,8 @@ router.get('/employee/department/:dept', (req, res) => {
 router.get('/employee/manager/:man', (req, res) => {
     const sql = `SELECT * FROM employees
     WHERE employees.manager_id = ?`;
-
-     db.query(sql, req.params.id, (err, rows) => {
+    const params = req.params.manager_id;
+     db.query(sql, params, (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
             return;
@@ -84,10 +85,10 @@ router.get('/employee/:id', (req, res) => {
 // Create an employee
 router.post('/employee', ({ body }, res) => {
     const sql = `INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
-    VALUES (?, ?, ?, ?)`;
-    const params = [body.id, body.first_name, body.last_name, body.role_id];
+    VALUES (?, ?, ?, ?, ?)`;
+    const params = [body.id, body.first_name, body.last_name, body.role_id, body.manager_id];
 
-    db.query(sql, params, (err, result) => {
+    db.query(sql, params, (err, res) => {
         if (err) {
             res.status(400).json({ error: err.message });
             return;

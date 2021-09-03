@@ -37,8 +37,9 @@ const userPrompt = async () => {
         type: 'list',
         name: 'chooseAction',
         message: 'What would you like to do?',
-        choices: ['View all employees', 'View all employees by department','View all employees my manager', 'Add employee', 'Remove employee', 'Update employee role', 'Update employee manager', 'quit']
+        choices: ['View all employees', 'View all employees by department','View all employees by manager', 'Add employee', 'Remove employee', 'Update employee role', 'Update employee manager', 'quit']
     });
+    
     if (answers.chooseAction == 'View all employees') {
         viewAll();
     } else if (answers.chooseAction == 'View all employees by department') {
@@ -56,6 +57,7 @@ const userPrompt = async () => {
     } else {
         quitApp();
     }
+    
 };
 
 const viewAll = async () => {
@@ -113,7 +115,12 @@ const viewAllByManager = async () => {
 const addEmployee = async () => {
     const createEmployee = await inquirer
     .prompt([
-        {
+    {
+        type: 'number',
+        name: 'newEmpId',
+        message: 'What is the id of the new employee?'
+    },
+    {
         type: 'input',
         name: 'newEmpFirst',
         message: 'What is the first name of the employee?'
@@ -134,17 +141,18 @@ const addEmployee = async () => {
         message: 'What is the manager id for this employee?'
     }
 ]);
-    db.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id)
-    VALUES (?, ?, ?, ?)`, 
+    db.query(`INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
+    VALUES (?, ?, ?, ?, ?)`, 
+    [createEmployee.newEmpId,
     createEmployee.newEmpFirst, 
     createEmployee.newEmpLast, 
     createEmployee.newEmpRoleId, 
-    createEmployee.newEmpManId, 
-    (err, result) => {
+    createEmployee.newEmpManId], 
+    (err, res) => {
         if (err) {
             console.log(err);
-        }
-        console.table(result);
+        };
+        console.table(res);
     }
 
     )
