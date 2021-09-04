@@ -25,6 +25,7 @@ router.get('/employee', (req, res) => {
     });
 });
 
+// Get all employees by department
 router.get('/employee/department/:dept', (req, res) => {
     const sql = `SELECT * FROM employees
     WHERE departments.id = ?`;
@@ -43,6 +44,7 @@ router.get('/employee/department/:dept', (req, res) => {
     
 });
 
+// Get all employees by manager
 router.get('/employee/manager/:man', (req, res) => {
     const sql = `SELECT * FROM employees
     WHERE employees.manager_id = ?`;
@@ -78,6 +80,25 @@ router.get('/employee/:id', (req, res) => {
         res.json({
             message: 'success',
             data: row
+        });
+    });
+});
+
+// Get total salary budget for a department
+router.get('/department/:budget', ({ body }, res) => {
+    const sql = `SELECT * FROM roles, 
+    LEFT JOIN departments
+    ON departments.id = roles.department_id
+    WHERE department_id = ?`;
+    const params = req.params.department_id;
+    db.query(sql, params, (err, res) => {
+        if (err) {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+        res.json({
+            message: 'success',
+            data: body
         });
     });
 });

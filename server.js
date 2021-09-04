@@ -160,6 +160,7 @@ const addEmployee = async () => {
     )
 };
 
+// Delete an employee from the database
 const removeEmployee = async () => {
     const deleteEmp = await inquirer
     .prompt({
@@ -175,9 +176,7 @@ const removeEmployee = async () => {
             }
             console.table(res);
         });
-    };
-    
-
+    };    
 
 const updateRole = async () => {
     const roleUpdate = await inquirer
@@ -195,7 +194,7 @@ const updateRole = async () => {
     ]);
     db.query(`UPDATE employees
     SET role_id = ?
-    Where id = ?`, [roleUpdate.empId, roleUpdate.roleId],
+    Where id = ?`, [roleUpdate.roleId, roleUpdate.empId],
     (err, res) => {
         if (err) {
             console.log(err);
@@ -204,12 +203,8 @@ const updateRole = async () => {
     });
 };
 
-const updateManager = async () => {
-
-};
-
 const quitApp = () => {
     console.log('Goodbye');
-}
+};
 
 userPrompt();
