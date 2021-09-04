@@ -6,6 +6,8 @@ const employeeRoutes = require('./routes/employeeRoutes');
 const db = require('./db/connection');
 const router = require('./routes/employeeRoutes');
 const { restoreDefaultPrompts } = require('inquirer');
+const { use } = require('./routes/employeeRoutes');
+const { end } = require('./db/connection');
 
 
 const PORT = process.env.PORT || 3001;
@@ -39,7 +41,7 @@ const userPrompt = async () => {
         type: 'list',
         name: 'chooseAction',
         message: 'What would you like to do?',
-        choices: ['View all employees', 'View all employees by department','View all employees by manager', 'Add employee', 'Remove employee', 'Update employee role', 'Update employee manager', 'quit']
+        choices: ['View all employees', 'View all employees by department','View all employees by manager', 'Add employee', 'Remove employee', 'Update employee role', 'Update employee manager', 'Quit']
     });
     
     if (answers.chooseAction == 'View all employees') {
@@ -58,8 +60,7 @@ const userPrompt = async () => {
         updateManager();
     } else {
         quitApp();
-    }
-    
+    }   
 };
 
 const viewAll = async () => {
@@ -73,8 +74,10 @@ const viewAll = async () => {
             console.log(err);
         }
         console.table(result);
-    });
+        userPrompt();
+    }); 
 };
+
 
 const viewAllByDepartment = async () => {
     const whatDept = await inquirer
@@ -92,6 +95,7 @@ const viewAllByDepartment = async () => {
             console.log(err);
         }
         console.table(result);
+        userPrompt();
     });
 };
 
@@ -111,6 +115,7 @@ const viewAllByManager = async () => {
             console.log(err);
         }
         console.table(result);
+        userPrompt();
     });
 };
 
@@ -155,6 +160,7 @@ const addEmployee = async () => {
             console.log(err);
         };
         console.table(res);
+        userPrompt();
     }
 
     )
@@ -175,6 +181,7 @@ const removeEmployee = async () => {
                 console.log(err);
             }
             console.table(res);
+            userPrompt();
         });
     };    
 
@@ -200,11 +207,12 @@ const updateRole = async () => {
             console.log(err);
         }
         console.table(res);
+        userPrompt();
     });
 };
 
 const quitApp = () => {
-    console.log('Goodbye');
+    console.log('Goodbye')
 };
 
 userPrompt();
