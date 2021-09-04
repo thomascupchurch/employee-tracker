@@ -41,7 +41,7 @@ const userPrompt = async () => {
         type: 'list',
         name: 'chooseAction',
         message: 'What would you like to do?',
-        choices: ['View all employees', 'View all employees by department','View all employees by manager', 'Add employee', 'Remove employee', 'Update employee role', 'Update employee manager', 'Quit']
+        choices: ['View all employees', 'View all employees by department','View all employees by manager', 'Add employee', 'Remove employee', 'Update employee role', 'Quit']
     });
     
     if (answers.chooseAction == 'View all employees') {
@@ -56,8 +56,6 @@ const userPrompt = async () => {
         removeEmployee();
     } else if (answers.chooseAction == 'Update employee role') {
         updateRole();
-    } else if (answers.chooseAction == 'Update employee manager') {
-        updateManager();
     } else {
         quitApp();
     }   
@@ -106,11 +104,19 @@ const viewAllByManager = async () => {
         name: 'manChoice',
         message: 'What is the manager id?',
     });
-    db.query(`SELECT * FROM employees
-    LEFT JOIN employees
+    db.query(
+        
+        
+        /*`SELECT * FROM employees
+    INNER JOIN employees
     ON employees.id = employees.manager_id
     WHERE manager_id = ?
-    `, whatMan.manChoice, (err, result) => {
+    `*/
+    
+    `SELECT * FROM employees
+    WHERE employees.manager_id = ?
+    `
+    , whatMan.manChoice, (err, result) => {
         if (err) {
             console.log(err);
         }
