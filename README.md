@@ -21,7 +21,7 @@ console.table
 https://github.com/thomascupchurch/employee-tracker
 
 ## Walkthrough video
-https://drive.google.com/file/d/1k8uBPtLuWAIspVEXiM2IQ15X6PO-mVGc/view
+https://github.com/thomascupchurch/employee-tracker
 
 ## Screenshot
 ![screenshot](./assets/employee-tracker-screenshot.png)
