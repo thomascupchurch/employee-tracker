@@ -121,6 +121,42 @@ router.post('/employee', ({ body }, res) => {
     });
 });
 
+// create a role
+router.post('/role', ({ body }, res) => {
+    const sql = `INSERT INTO role (id, title, salary, department_id)
+    VALUES (?, ?, ?, ?)`;
+    const params = [body.id, body.title, body.salary, body.department_id];
+
+    db.query(sql, params, (err, res) => {
+        if (err) {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+        res.json({
+            message: 'success',
+            data: body
+        });
+    });
+});
+
+// create a department
+router.post('/department', ({ body }, res) => {
+    const sql = `INSERT INTO department (id, name)
+    VALUES (?, ?)`;
+    const params = [body.id, body.name];
+
+    db.query(sql, params, (err, res) => {
+        if (err) {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+        res.json({
+            message: 'success',
+            data: body
+        });
+    });
+});
+
 router.put('/employee/:id', ({ body }, res) => {
     const sql = `UPDATE employees
                 SET role_id = ?
